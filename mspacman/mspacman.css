@@ -1,0 +1,9 @@
+body {
+background-color: white;
+margin-left: 50px;
+margin-top: 50px;
+}
+
+canvas {
+border: 10px inset blue;
+}
