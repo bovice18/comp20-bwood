@@ -1,5 +1,10 @@
 function start_game()
 {
+	draw(190, 495, 2, false, 1, 0);
+}
+
+function draw(frogx, frogy, lives, over, level, time)
+{
 	canvas = document.getElementById("game");
 		if(canvas.getContext)
 		{
@@ -28,6 +33,11 @@ function start_game()
 			ctx.font="bold 20px Microgramma";
 			ctx.fillText("Score: 0",0,560);
 			ctx.fillText("High Score: 0",90,560);
+			
+			ctx.drawImage(img, 13, 370, 22, 18, frogx, frogy, 22, 18); //frog			
+			ctx.drawImage(img, 47, 265, 25, 26, 165, 320, 25, 26); // vehicle 1
+			ctx.drawImage(img, 47, 265, 25, 26, 300, 320, 25, 26); //vehicle 2
+			ctx.drawImage(img, 7, 166, 178, 22, 10, 115, 178, 22); //log
 		}
 		else
 		{
