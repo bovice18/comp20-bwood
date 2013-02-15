@@ -20,6 +20,14 @@ function start_game()
 			ctx.drawImage(img, 0, 119, 399, 35, 0, 485, 399, 35); //purple sidewalks
 			ctx.drawImage(img, 12, 335, 19, 22, 0, 520, 18, 22); //lives
 			ctx.drawImage(img, 12, 335, 19, 22, 20, 520, 18, 22); //lives2
+			
+			ctx.font="bold 30px Microgramma";
+			ctx.fillStyle = '00FF00';
+			ctx.fillText("Level 1",55,539);
+			
+			ctx.font="bold 20px Microgramma";
+			ctx.fillText("Score: 0",0,560);
+			ctx.fillText("High Score: 0",90,560);
 		}
 		else
 		{
