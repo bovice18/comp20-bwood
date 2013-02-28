@@ -1,6 +1,8 @@
 Beau Wood
-Comp20 Lab7
+Comp20 Lab8
 
+- I correctly implemented an XMLHTTPRequest.
+- I correctly grabbed the JSON from the webpage and used it as input my parse() function.
 - I correctly parsed the string using the function JSON.parse(txt).
 - I then created 9 different lists, 1 for each of the jobs.
 - I was able to access the name of each company using obj[i].company
