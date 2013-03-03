@@ -9,6 +9,7 @@ var myOptions = {
 				};
 var map;
 var marker;
+var stationMarker
 var infowindow = new google.maps.InfoWindow();
 
 var stations = new Array();
@@ -17,8 +18,10 @@ function init()
 {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	initStations();
-	//getSchedules();
 	getMyLocation();
+	
+	//getSchedules();
+	
 }
 
 function initStations()
@@ -45,7 +48,6 @@ function initStations()
 	stations[19] = {name:'Quincy Center', lat:42.251809, lng:-71.005409};
 	stations[20] = {name:'Quincy Adams', lat:42.233391, lng:-71.007153};
 	stations[21] = {name:'Braintree', lat:42.2078543, lng:-71.0011385};
-	
 	for(i = 0; i < 22; i++)
 	{
 		createMarker(stations[i].name, stations[i].lat, stations[i].lng);
@@ -112,7 +114,7 @@ function renderMap()
 		title: "Here I Am!"
 	});
 	marker.setMap(map);
-
+	
 	// Open info window on click of marker
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent(marker.title);
@@ -120,19 +122,17 @@ function renderMap()
 	});
 }
 
-
-
 function createMarker(place, lat, lng)
 {
-	var placeLoc = new google.maps.LatLng(myLat, myLng);
-	var marker = new google.maps.Marker({
-		map: map,
-		position: placeLoc
+	placeLoc = new google.maps.LatLng(lat, lng);
+	stationMarker = new google.maps.Marker({
+		position: placeLoc,
 	});
-
-	google.maps.event.addListener(marker, 'click', function() {
+	
+	//stationMarker.setMap(map);
+	google.maps.event.addListener(stationMarker, 'click', function() {
 		infowindow.close();
-		infowindow.setContent(place.name);
+		infowindow.setContent(place);
 		infowindow.open(map, this);
 	});
 }
