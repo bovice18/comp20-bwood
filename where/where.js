@@ -22,10 +22,8 @@ function init()
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	initStations();	
 	
-	//getSchedules();
-	
 	getMyLocation();
-	
+	getCandW();
 }
 
 function initStations()
@@ -41,15 +39,15 @@ function initStations()
 	stations.push(st);
 
 	st = new google.maps.LatLng(42.3884, -71.119149);
-	stationMarkers.push(new google.maps.Marker({position: st, title: "Porter Square", icon: pic}));
+	stationMarkers.push(new google.maps.Marker({position: st, title: "Porter Square Station", icon: pic}));
 	stations.push(st);
 	
 	st = new google.maps.LatLng(42.373362, -71.118956);
-	stationMarkers.push(new google.maps.Marker({position: st, title: "Harvard Square", icon: pic}));
+	stationMarkers.push(new google.maps.Marker({position: st, title: "Harvard Square Station", icon: pic}));
 	stations.push(st);
 	
 	st = new google.maps.LatLng(42.365486, -71.103802);
-	stationMarkers.push(new google.maps.Marker({position: st, title: "Central Square", icon: pic}));
+	stationMarkers.push(new google.maps.Marker({position: st, title: "Central Square Station", icon: pic}));
 	stations.push(st);
 	
 	st = new google.maps.LatLng(42.36249079, -71.08617653);
@@ -124,21 +122,23 @@ function initStations()
 		stationMarkers[m].setMap(map);		
 		
 		google.maps.event.addListener(stationMarkers[m], 'click', function() {
+		stationName = this.title;
+		mvcObj = this
 		infowindow.close();
 		
-		request.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/station_schedule_all.json?stop_name=Alewife%20Station", true);
+		request.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/station_schedule_all.json?stop_name=" + stationName, true);
 	
-        // Execute the request
+        
         request.send(null);
 		var data;
-        // Handle the request (however you want)
+        
         request.onreadystatechange = function() 
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
 				data = parse(request.responseText);
 				infowindow.setContent(data);	
-				infowindow.open(map, this);
+				infowindow.open(map, mvcObj);
 			}	
 		}	
 		});
@@ -167,31 +167,14 @@ function initStations()
 	braintreeLine.setMap(map);
 }
 
-function getSchedule(stationName) {
-        // Set up the request
-		request.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/station_schedule_all.json?stop_name=Alewife%20Station", true);
-	
-        // Execute the request
-        request.send(null);
-		data = "";
-        // Handle the request (however you want)
-        request.onreadystatechange = function() 
-		{
-			if(request.readyState == 4 && request.status == 200)
-			{
-				data = parse(request.responseText);
-			}
-			
-		}
-		return data;
-}
+
 	
 function parse(raw)
 {
 	obj = JSON.parse(raw);
 	//console.log(raw);
 	var count = 0;
-	content = "<h1>" + obj.stop_name + "</h1><table border = '1'><tr><td>Direction</td><td>Estimated Arrival Time</td></tr>";
+	content = "<h1>" + obj[0].stop_name + "</h1><table border = '1'><tr><td>Direction</td><td>Estimated Arrival Time</td></tr>";
 	for ( i in obj )          
 	{
 		if(obj.hasOwnProperty(i))
@@ -200,7 +183,7 @@ function parse(raw)
 		}
 	}
 	
-	return "Hello";
+	return content;
 }
 
 function getMyLocation()
@@ -222,9 +205,6 @@ function renderMap()
 
 	me = new google.maps.LatLng(myLat, myLng);
 
-	// Update map and go there...
-	map.panTo(me);
-
 	// Create a marker
 	marker = new google.maps.Marker({
 		position: me,
@@ -238,5 +218,84 @@ function renderMap()
 		infowindow.setContent(marker.title);
 		infowindow.open(map, marker);
 	});
+}
+
+function getCandW()
+{
+	var request = new XMLHttpRequest();
+
+	request.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
+
+     // Execute the request
+    request.send(null);
+
+	// Handle the request (however you want)
+	request.onreadystatechange = function() 
+	{
+		if(request.readyState == 4 && request.status == 200)
+		{
+			carmenWaldo(JSON.parse(request.responseText));
+		}
+	}
+}
+
+function carmenWaldo(obj)
+{
+	console.log("looking for carmen and waldo");
+	try{
+	
+		if(obj[0].name == "Waldo"){
+				console.log(obj[0].loc);
+				waldo = new google.maps.LatLng(obj[0].loc.latitude, obj[0].loc.longitude);
+				waldoMarker = new google.maps.Marker({
+				position: waldo,
+				title: obj[0].loc.note,	
+				icon: "assets/waldo.png"
+
+			});
+			waldoMarker.setMap(map);
+			
+			google.maps.event.addListener(waldoMarker, 'click', function() {
+			infowindow.setContent(waldoMarker.title);
+			infowindow.open(map, waldoMarker);
+	});
+		}
+		else if(obj[0].name == "Carmen Sandiego"){
+			console.log(obj[0].loc);
+			carmen = new google.maps.LatLng(obj[0].loc.latitude, obj[0].loc.longitude);
+			carmenMarker = new google.maps.Marker({
+			position: carmen,
+			title: obj[0].loc.note,	
+			icon: "assets/carmen.png"
+			});
+			carmenMarker.setMap(map);
+			
+			google.maps.event.addListener(carmenMarker, 'click', function() {
+			infowindow.setContent(carmenMarker.title);
+			infowindow.open(map, carmenMarker);
+	});
+		}
+		if(obj[1].name == "Carmen Sandiego"){
+			console.log(obj[1].loc);
+			carmen = new google.maps.LatLng(obj[1].loc.latitude, obj[1].loc.longitude);
+			carmenMarker = new google.maps.Marker({
+			position: carmen,
+			title: obj[1].loc.note,	
+			icon: "assets/carmen.png"
+
+			});
+			carmenMarker.setMap(map);
+			
+			google.maps.event.addListener(carmenMarker, 'click', function() {
+			infowindow.setContent(carmenMarker.title);
+			infowindow.open(map, carmenMarker);
+	});
+
+		}
+	
+	}
+	catch(error){	
+	}
+	
 }
 
