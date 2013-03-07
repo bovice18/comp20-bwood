@@ -15,16 +15,15 @@ var ashmontBranch =[];
 var braintreeBranch = [];
 var infowindow = new google.maps.InfoWindow();
 var scheduleJSON;
-var schedule
+var schedule;
+var distWaldo;
+var distCarmen;
 
 function init()
 {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	initStations();	
-	
-	//getMyLocation();
-	renderMap();
-	getCandW();
+	getMyLocation();
 }
 
 function initStations()
@@ -127,9 +126,7 @@ function initStations()
 		mvcObj = this
 		infowindow.close();
 		
-		request.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/station_schedule_all.json?stop_name=" + stationName, true);
-	
-        
+		request.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/redline.json", true); 
         request.send(null);
 		var data;
         
@@ -137,7 +134,7 @@ function initStations()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				data = parse(request.responseText);
+				data = parse(request.responseText, stationName);
 				infowindow.setContent(data);	
 				infowindow.open(map, mvcObj);
 			}	
@@ -170,18 +167,301 @@ function initStations()
 
 
 	
-function parse(raw)
+function parse(raw, stationName)
 {
 	obj = JSON.parse(raw);
-	//console.log(raw);
-	var count = 0;
-	content = "<h1>" + obj[0].stop_name + "</h1><table border = '1'><tr><td>Direction</td><td>Estimated Arrival Time</td></tr>";
+	content = "<h1>" + stationName + "</h1><table border = '1'><tr><td>Direction</td><td>Estimated Arrival Time</td></tr>";
 	for ( i in obj )          
 	{
-		if(obj.hasOwnProperty(i))
+		if(obj[i].InformationType == "Predicted" && stationName == "Alewife Station" && (obj[i].PlatformKey == "RALEN"))
 		{
-			content += "<tr><td>" + obj[i].direction + "</td><td>" + obj[i].time_remaining + "</td></tr>";
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
 		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Davis Station" && (obj[i].PlatformKey == "RDAVN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Davis Station" && (obj[i].PlatformKey == "RDAVS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Porter Square Station" && (obj[i].PlatformKey == "RPORN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Porter Square Station" && (obj[i].PlatformKey == "RPORS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Harvard Square Station" && (obj[i].PlatformKey == "RHARN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Harvard Square Station" && (obj[i].PlatformKey == "RHARS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Central Square Station" && (obj[i].PlatformKey == "RCENN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Central Square Station" && (obj[i].PlatformKey == "RCENS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Kendall/MIT Station" && (obj[i].PlatformKey == "RKENN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Kendall/MIT Station" && (obj[i].PlatformKey == "RKENS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Charles/MGH Station" && (obj[i].PlatformKey == "RMGHN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Charles/MGH Station" && (obj[i].PlatformKey == "RMGHS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Park St. Station" && (obj[i].PlatformKey == "RPRKN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Park St. Station" && (obj[i].PlatformKey == "RPRKS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Downtown Crossing Station" && (obj[i].PlatformKey == "RDTCN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Downtown Crossing Station" && (obj[i].PlatformKey == "RDTCS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "South Station" && (obj[i].PlatformKey == "RSOUN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "South Station" && (obj[i].PlatformKey == "RSOUS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Broadway Station" && (obj[i].PlatformKey == "RBRON"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Broadway Station" && (obj[i].PlatformKey == "RBROS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Andrew Station" && (obj[i].PlatformKey == "RANDN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Andrew Station" && (obj[i].PlatformKey == "RANDS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "JFK/UMass Station" && (obj[i].PlatformKey == "RJFKN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "JFK/UMass Station" && (obj[i].PlatformKey == "RJFKS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Savin Hill Station" && (obj[i].PlatformKey == "RSAVN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Savin Hill Station" && (obj[i].PlatformKey == "RSAVS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Fields Corner Station" && (obj[i].PlatformKey == "RFIEN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Fields Corner Station" && (obj[i].PlatformKey == "RFIES"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Shawmut Station" && (obj[i].PlatformKey == "RSHAN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Shawmut Station" && (obj[i].PlatformKey == "RSHAS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Ashmont Station" && (obj[i].PlatformKey == "RASHS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "North Quincy Station" && (obj[i].PlatformKey == "RNQUN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "North Quincy Station" && (obj[i].PlatformKey == "RNQUS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Wollaston Station" && (obj[i].PlatformKey == "RWOLN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Wollaston Station" && (obj[i].PlatformKey == "RWOLS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Quincy Center Station" && (obj[i].PlatformKey == "RQUCN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Quincy Center Station" && (obj[i].PlatformKey == "RQUCS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Quincy Adams Station" && (obj[i].PlatformKey == "RQUAN"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "NORTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Quincy Adams Station" && (obj[i].PlatformKey == "RQUAS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		if(obj[i].InformationType == "Predicted" && stationName == "Braintree Station" && (obj[i].PlatformKey == "RBRAS"))
+		{
+			if(obj.hasOwnProperty(i))
+			{
+				content += "<tr><td>" + "SOUTHBOUND" + "</td><td>" + obj[i].TimeRemaining + "</td></tr>";
+			}
+		}
+		
+		
 	}
 	
 	return content;
@@ -189,23 +469,25 @@ function parse(raw)
 
 function getMyLocation()
 {
+	var loc;
 	if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
 		navigator.geolocation.getCurrentPosition(function(position) {
 			myLat = position.coords.latitude;
 			myLng = position.coords.longitude;
 			renderMap();
+			getCandW();
 		});
 	}
 	else {
 		alert("Geolocation is not supported by your web browser.  What a shame!");
 	}
+	
 }
 
 function renderMap()
 {
 
-	me = new google.maps.LatLng(42.39674, -71.121815);
-
+	me = new google.maps.LatLng(myLat, myLng);
 	// Create a marker
 	marker = new google.maps.Marker({
 		position: me,
@@ -226,16 +508,17 @@ function renderMap()
 		}
 	}
 	
+	
 	// Open info window on click of marker
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent("Your closest station is: " + stationName + ", " + distance.toString() + " miles away");
 		infowindow.open(map, marker);
 	});
+	
 }
 
 function getCandW()
 {
-	console.log("test");
 	var CandWRequest = new XMLHttpRequest();
 
 	CandWRequest.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
