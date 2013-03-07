@@ -22,7 +22,8 @@ function init()
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	initStations();	
 	
-	getMyLocation();
+	//getMyLocation();
+	renderMap();
 	getCandW();
 }
 
@@ -203,7 +204,7 @@ function getMyLocation()
 function renderMap()
 {
 
-	me = new google.maps.LatLng(myLat, myLng);
+	me = new google.maps.LatLng(42.39674, -71.121815);
 
 	// Create a marker
 	marker = new google.maps.Marker({
@@ -212,10 +213,22 @@ function renderMap()
 		
 	});
 	marker.setMap(map);
+	var distance = getDistance(me, stationMarkers[0].position);
+	var newDistance;
+	var stationName = stationMarkers[0].title;
+	//find closest station
+	for(var m in stationMarkers){
+		newDistance = getDistance(me, stationMarkers[m].position);
+		if(distance > newDistance)
+		{
+			distance = newDistance;
+			stationName = stationMarkers[m].title;
+		}
+	}
 	
 	// Open info window on click of marker
 	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.setContent(marker.title);
+		infowindow.setContent("Your closest station is: " + stationName + ", " + distance.toString() + " miles away");
 		infowindow.open(map, marker);
 	});
 }
@@ -246,9 +259,10 @@ function carmenWaldo(obj)
 	
 		if(obj[0].name == "Waldo"){
 				waldo = new google.maps.LatLng(obj[0].loc.latitude, obj[0].loc.longitude);
+				waldoDistance = getDistance(me, waldo);
 				waldoMarker = new google.maps.Marker({
 				position: waldo,
-				title: obj[0].loc.note,	
+				title: obj[0].loc.note + " at a location " + waldoDistance + " miles away",	
 				icon: "assets/waldo.png"
 
 			});
@@ -261,9 +275,10 @@ function carmenWaldo(obj)
 		}
 		else if(obj[0].name == "Carmen Sandiego"){
 			carmen = new google.maps.LatLng(obj[0].loc.latitude, obj[0].loc.longitude);
+			carmenDistance = getDistance(me, carmen);
 			carmenMarker = new google.maps.Marker({
 			position: carmen,
-			title: obj[0].loc.note,	
+			title: "Carmen is at " + obj[0].loc.note + ", " + carmenDistance + " miles away",	
 			icon: "assets/carmen.png"
 			});
 			carmenMarker.setMap(map);
@@ -275,9 +290,10 @@ function carmenWaldo(obj)
 		}
 		if(obj[1].name == "Carmen Sandiego"){
 			carmen = new google.maps.LatLng(obj[1].loc.latitude, obj[1].loc.longitude);
+			carmenDistance = getDistance(me, carmen);
 			carmenMarker = new google.maps.Marker({
 			position: carmen,
-			title: obj[1].loc.note,	
+			title: "Carmen is at " + obj[1].loc.note + ", " + carmenDistance + " miles away",	
 			icon: "assets/carmen.png"
 
 			});
@@ -294,5 +310,24 @@ function carmenWaldo(obj)
 	catch(error){	
 	}
 	
+}
+
+function getDistance(me, station){
+	var R = 6371; // km
+	var dLat = toRad((station.lat() - me.lat()));
+	var dLon = toRad((station.lng() - me.lng()));
+	var lat1 = toRad(me.lat());
+	var lat2 = toRad(station.lat());
+
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+			Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c;
+	return d*(0.6214);
+
+}
+function toRad(Value) {
+    /** Converts numeric degrees to radians */
+    return Value * Math.PI / 180;
 }
 
