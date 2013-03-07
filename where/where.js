@@ -222,19 +222,19 @@ function renderMap()
 
 function getCandW()
 {
-	var request = new XMLHttpRequest();
+	var CandWRequest = new XMLHttpRequest();
 
-	request.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
+	CandWRequest.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
 
      // Execute the request
-    request.send(null);
+    CandWRequest.send(null);
 
 	// Handle the request (however you want)
-	request.onreadystatechange = function() 
+	CandWRequest.onreadystatechange = function() 
 	{
-		if(request.readyState == 4 && request.status == 200)
+		if(CandWRequest.readyState == 4 && CandWRequest.status == 200)
 		{
-			carmenWaldo(JSON.parse(request.responseText));
+			carmenWaldo(JSON.parse(CandWRequest.responseText));
 		}
 	}
 }
