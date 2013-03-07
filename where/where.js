@@ -222,6 +222,7 @@ function renderMap()
 
 function getCandW()
 {
+	console.log("test");
 	var CandWRequest = new XMLHttpRequest();
 
 	CandWRequest.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
@@ -241,11 +242,9 @@ function getCandW()
 
 function carmenWaldo(obj)
 {
-	console.log("looking for carmen and waldo");
 	try{
 	
 		if(obj[0].name == "Waldo"){
-				console.log(obj[0].loc);
 				waldo = new google.maps.LatLng(obj[0].loc.latitude, obj[0].loc.longitude);
 				waldoMarker = new google.maps.Marker({
 				position: waldo,
@@ -261,7 +260,6 @@ function carmenWaldo(obj)
 	});
 		}
 		else if(obj[0].name == "Carmen Sandiego"){
-			console.log(obj[0].loc);
 			carmen = new google.maps.LatLng(obj[0].loc.latitude, obj[0].loc.longitude);
 			carmenMarker = new google.maps.Marker({
 			position: carmen,
@@ -276,7 +274,6 @@ function carmenWaldo(obj)
 	});
 		}
 		if(obj[1].name == "Carmen Sandiego"){
-			console.log(obj[1].loc);
 			carmen = new google.maps.LatLng(obj[1].loc.latitude, obj[1].loc.longitude);
 			carmenMarker = new google.maps.Marker({
 			position: carmen,
