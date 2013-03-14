@@ -5,15 +5,27 @@
 <head>
 <title>Fecesbook</title>
 	<script>
+	var day, month, year, hour, minute;
+		function init()
+		{
+			messages = document.getElementById("status");
+			for( key in localStorage)
+			{
+				var update = document.createElement("div");
+				var text = document.createTextNode(localStorage[key]);
+				update.appendChild(text);
+				messages.insertBefore(update, messages.childNodes[0]);
+			}
+		}
 		function getText()
 		{
 			var currentDate = new Date();
-			var day = currentDate.getDate();
-			var month = currentDate.getMonth() + 1;
-			var year = currentDate.getFullYear();
+			day = currentDate.getDate();
+			month = currentDate.getMonth() + 1;
+			year = currentDate.getFullYear();
 			
-			var hour = currentDate.getHours();
-			var minute = currentDate.getMinutes();
+			hour = currentDate.getHours();
+			minute = currentDate.getMinutes();
 			if(minute < 10)
 			{
 				minute = "0" + minute;
@@ -24,8 +36,8 @@
 		 	var newLine = document.createElement("br");		 	 
 		 	var newDate = document.createTextNode(month + "/" + day + "/" + year + " ");
 		 	var newTime = document.createTextNode(hour + ":" + minute + " - ");
-
-		 	var messages = document.getElementById("status");
+			
+			messages = document.getElementById("status");
 		 	var newUpdate = document.createElement("div");
 		 	newUpdate.appendChild(newDate);
 		 	newUpdate.appendChild(newTime);		    
@@ -33,12 +45,18 @@
 		 	newUpdate.appendChild(newLine);
 		 	
 		 	messages.insertBefore(newUpdate, messages.childNodes[0]);
+			store(input);
 		 	
 		}
+		function store(input)
+		{
+			localStorage[new Date().getTime()] = month + "/" + day + "/" + year + " " + hour + ":" + minute + " - " + input;
+		}
+		
 	</script>
 </head>
 
-<body>
+<body onload="init()">
 	<h1>Fecebook</h1>
 	<div id="nav">
 		<ul>
