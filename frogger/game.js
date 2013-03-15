@@ -17,8 +17,19 @@
 			}
 		});
 
+		
+//audio
+var myAudio = new Audio('assets/frogger_audio.mp3');
+myAudio.addEventListener('ended', function(){
+	this.currentTime = 0;
+	this.play();
+	}, false);
+
+
 var img = new Image();
 img.src = 'assets/frogger_sprites.png';	
+var dead = new Image();
+dead.src = 'assets/dead_frog.png';
 
 var frogx, frogy, cars1y, logs1y, lives, over, level, score, highscore, time, frogDir, frogMove;
 var frogR;
@@ -32,6 +43,7 @@ var scored0, scored1, scored2, scored3, scored4;
 var over;
 var froglog0, froglog1, froglog2, froglog3;
 var speed;
+var deadFrog;
 
 //Called at opening of the page
 function start_game()
@@ -44,7 +56,7 @@ function start_game()
 	//logs
 	logs1x = -37;  logs2x = -177; logs3x = 0; logs4x = -400;
 	//gameplay
-	lives = 2; over = false; level = 1; time = 0; score = 0; highscore = 0; speed = 30; over = false;
+	lives = 2; over = false; level = 1; time = 0; score = 0; highscore = 0; speed = 30; over = false; deadfrog = false;
 	
 	
 	froglog0 = false; froglog1 = false; froglog2 = false;froglog3 = false;
@@ -53,7 +65,7 @@ function start_game()
 	reset = false;
 	counter = 0;
 	
-	
+	myAudio.play();
 	draw();	
 	interval = setInterval(function(){redraw()},speed);
 	//gamePlay();
@@ -342,7 +354,7 @@ function collision8()
 //collision has occured
 function COLLISION()
 {
-	
+	drawDeadFrog();
 	if(lives == 0)
 	{
 		clearInterval(interval);
@@ -350,6 +362,21 @@ function COLLISION()
 	}
 	resetFrog();
 	lives--;
+}
+function drawDeadFrog()
+{
+	deadx = frogx;
+	deady = frogy;
+	deadFrog = true;
+	count = 0;
+	deadInterval = setInterval(function(){ 
+		count++;
+		if(count == 5)
+		{
+			clearInterval(deadInterval);
+			deadFrog = false;
+		}
+	}, 100);
 }
 function gameOver()
 {
@@ -361,6 +388,7 @@ function gameOver()
 	ctx.fillStyle = '00FF00';
 	ctx.fillText("GAME OVER",112, 250);
 	ctx.fillText("HIGH SCORE: " + score, 90, 295);
+	myAudio.pause();
 }
 //Called very often, calls all other draw functions to draw the entire canvas
 function draw()
@@ -419,6 +447,10 @@ function draw()
 			{
 				newLevel();
 			}
+			if(deadFrog)
+			{
+				ctx.drawImage(dead, 3, 2, 20, 26, deadx, deady, 20, 26); //frog
+			}
 			
 		}
 		else
@@ -430,6 +462,7 @@ function draw()
 //Decides which frog to draw depending on direction and whether the frog is moving or not
 function drawFrog()
 {
+
 	if(frogx > 354)
 	{
 		frogx = 354;
@@ -438,7 +471,6 @@ function drawFrog()
 	{
 		frogx = 2;
 	}
-	
 	if(frogDir == 0) //forward
 	{
 		if(frogMove) //jumper
