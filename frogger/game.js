@@ -29,7 +29,7 @@ function start_game()
 {
 	//locations
 	//frog
-	frogx = 188; frogy = 500; frogMove = false; frogDir = 0;
+	frogx = 187; frogy = 500; frogMove = false; frogDir = 0;
 	//cars
 	cars1x = -20; cars2x = 80; cars3x = -30; cars4x = 0; 
 	//logs
@@ -260,6 +260,7 @@ function redraw()
 }
 function frogUp()
 {
+	frogDir = 0;
 	if(!moving)
 	{
 		counter = 0;
@@ -317,70 +318,146 @@ function moveUp(y)
 	}
 	draw();
 }
-function moveRight(y)
-{
-	frogy--;
-	counter++;
-	if(counter == y)
-	{
-		clearInterval(frogInterval);
-		frogMove = false;
-	}
-	draw();
-}
 
-function moveLeft(y)
-{
-	frogy--;
-	counter++;
-	if(counter == y)
-	{
-		clearInterval(frogInterval);
-		frogMove = false;
-	}
-	draw();
-}
 
-function moveRight(y)
-{
-	frogy--;
-	counter++;
-	if(counter == y)
-	{
-		clearInterval(frogInterval);
-		frogMove = false;
-	}
-	draw();
-}
+
+
 
 function frogRight()
 {
-
+	frogDir = 1;
+	if(!moving)
+	{
+		counter = 0;
+	}
+	
+	if(frogx > 354)
+	{
+	
+	}
+	else
+	{
+		frogMove = true;
+		if(!moving)
+		{
+			moving = true;
+			frogInterval = setInterval(function(){moveRight(28)},3);
+		}	
+	}
 }
+function moveRight(y)
+{
+	frogx++;
+	counter++;
+	if(counter == y)
+	{
+		clearInterval(frogInterval);
+		frogMove = false;
+		moving = false;
+	}
+	draw();
+}
+
+
+
 function frogLeft()
 {
-
+	frogDir = 2;
+	if(!moving)
+	{
+		counter = 0;
+	}
+	
+	if(frogx <  20)
+	{
+	
+	}
+	else
+	{
+		frogMove = true;
+		if(!moving)
+		{
+			moving = true;
+			frogInterval = setInterval(function(){moveLeft(28)},3);
+		}	
+	}
 }
+function moveLeft(y)
+{
+	frogx--;
+	counter++;
+	if(counter == y)
+	{
+		clearInterval(frogInterval);
+		frogMove = false;
+		moving = false;
+	}
+	draw();
+}
+
+
+
+
 function frogDown()
 {
-	
-}
-// function gamePlay()
-// {
-	// while(//game not over)
-	// {
-		
-    // }
-		
-		
-		
-		
-		
-		
-		
-		// update(); //calculate new coordinates
-		// redraw(); //redraw using new coordinates
-		
-	// }
+	frogDir = 3;
 
-// }
+	if(!moving)
+	{
+		counter = 0;
+	}
+	
+	if(frogy == 254)
+	{
+		frogMove = true;
+		if(!moving)
+		{
+			moving = true;
+			frogInterval = setInterval(function(){moveDown(35)},3);
+		}
+
+	}
+	else if(frogy == 289)
+	{
+		frogMove = true;
+		if(!moving)
+		{
+			moving = true;
+			frogInterval = setInterval(function(){moveDown(35)},3);
+		}	
+	}
+	else if(frogy == 500)
+	{
+		frogy = frogy;
+	}
+	else if(frogy == 459)
+	{
+		frogMove = true;
+		if(!moving)
+		{
+			moving = true;
+			frogInterval = setInterval(function(){moveDown(41)},3);
+		}	
+	}
+	else
+	{
+		frogMove = true;
+		if(!moving)
+		{
+			moving = true;
+			frogInterval = setInterval(function(){moveDown(45)},3);
+		}	
+	}	
+}
+function moveDown(y)
+{
+	frogy++;
+	counter++;
+	if(counter == y)
+	{
+		clearInterval(frogInterval);
+		frogMove = false;
+		moving = false;
+	}
+	draw();
+}
