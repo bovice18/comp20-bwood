@@ -1,17 +1,20 @@
 //check for user input
 		document.addEventListener("keyup", function(event) {
-			if (event.keyCode == 38) {
-				frogUp();
-				}
-			if (event.keyCode == 39) {
-				frogRight();
-				}
-			if (event.keyCode == 37) {
-				frogLeft();
-				}
-			if (event.keyCode == 40) {
-				frogDown();
-				}
+			if(!over)
+			{
+				if (event.keyCode == 38) {
+					frogUp();
+					}
+				if (event.keyCode == 39) {
+					frogRight();
+					}
+				if (event.keyCode == 37) {
+					frogLeft();
+					}
+				if (event.keyCode == 40) {
+					frogDown();
+					}
+			}
 		});
 
 var img = new Image();
@@ -23,11 +26,12 @@ var frogC;
 var interval;
 var frogInterval;
 var counter;
-var moving = false;
-var reset = false;
+var moving;
+var reset;
 var scored0, scored1, scored2, scored3, scored4;
 var over;
 var froglog0, froglog1, froglog2, froglog3;
+var speed;
 
 //Called at opening of the page
 function start_game()
@@ -40,61 +44,19 @@ function start_game()
 	//logs
 	logs1x = -37;  logs2x = -177; logs3x = 0; logs4x = -400;
 	//gameplay
-	lives = 2; over = false; level = 1; time = 0; score = 0; highscore = 0;
+	lives = 2; over = false; level = 1; time = 0; score = 0; highscore = 0; speed = 30; over = false;
+	
+	
+	froglog0 = false; froglog1 = false; froglog2 = false;froglog3 = false;
+	scored0 = false; scored1 = false; scored2 = false; scored3 = false; scored4 = false;
+	moving = false;
+	reset = false;
+	counter = 0;
+	
 	
 	draw();	
-	interval = setInterval(function(){redraw()},30);
+	interval = setInterval(function(){redraw()},speed);
 	//gamePlay();
-}
-//Checks to see if the frog has landed in an empty home
-function checkScore()
-{
-	if(frogy == 74 )//&& (frogx == 187 || frogx == 271 || frogx == 355 || frogx == 103 || frogx == 19)
-	{
-		console.log("test");
-		switch(frogx)
-		{
-			case 19:
-				if(!scored0)
-				{
-					scored0 = true;
-					score = score + 50;
-				}
-				
-				break;
-			case 103:
-				if(!scored1)
-				{
-					scored1 = true;
-					score = score + 50;
-				}
-				
-				break;
-			case 187:
-				if(!scored2)
-				{
-					scored2 = true;
-					score = score + 50;
-				}
-				break;
-			case 271:
-				if(!scored3)
-				{
-					scored3 = true;
-					score = score + 50;
-				}
-				break;
-			case 355:
-				if(!scored4)
-				{
-					scored4 = true;
-					score = score + 50;
-				}
-				break;
-		}
-		
-		resetFrog()
-	}
 }
 function resetFrog()
 {
@@ -151,6 +113,8 @@ function checkCollision()
 			break;
 	}
 }
+
+//each function represents a row on the gameboard
 function collision0()
 {
 	if((frogx > cars4x && frogx < (cars4x + 30)) || (frogR > cars4x && frogR < (cars4x + 30)))
@@ -312,9 +276,6 @@ function collision6()
 }
 function collision7()
 {
-	console.log(frogC);
-	console.log(logs1x);
-	//clearInterval(interval);
 	if(frogC > logs1x && frogC < (logs1x + 178))
 	{
 		froglog3 = true;
@@ -342,12 +303,43 @@ function collision7()
 }
 function collision8()
 {
-
+	if(frogC > 15 && frogC < 41 && !scored0)
+	{
+		score = score + 50;
+		scored0 = true;
+		resetFrog();
+	}
+	else if(frogC > 100 && frogC < 126 && !scored1)
+	{
+		score = score + 50;
+		scored1 = true;
+		resetFrog();
+	}
+	else if(frogC > 185 && frogC < 211 && !scored2)
+	{
+		score = score + 50;
+		scored2 = true;
+		resetFrog();
+	}
+	else if(frogC > 270 && frogC < 296 && !scored3)
+	{
+		score = score + 50;
+		scored3 = true;
+		resetFrog();
+	}
+	else if(frogC > 355 && frogC < 381 && !scored4)
+	{
+		score = score + 50;
+		scored4 = true;
+		resetFrog();
+	}
+	else
+	{
+		COLLISION();
+	}
 }
-function collision9()
-{
 
-}
+//collision has occured
 function COLLISION()
 {
 	
@@ -367,7 +359,8 @@ function gameOver()
 	
 	ctx.font="bold 30px Microgramma";
 	ctx.fillStyle = '00FF00';
-	ctx.fillText("GAME OVER",112, 275);
+	ctx.fillText("GAME OVER",112, 250);
+	ctx.fillText("HIGH SCORE: " + score, 90, 295);
 }
 //Called very often, calls all other draw functions to draw the entire canvas
 function draw()
@@ -422,6 +415,10 @@ function draw()
 			{
 				ctx.drawImage(img, 13, 370, 22, 18, 355, 74, 22, 18); //frog
 			}
+			if(scored0 && scored1 && scored2 && scored3 && scored4)
+			{
+				newLevel();
+			}
 			
 		}
 		else
@@ -433,6 +430,15 @@ function draw()
 //Decides which frog to draw depending on direction and whether the frog is moving or not
 function drawFrog()
 {
+	if(frogx > 354)
+	{
+		frogx = 354;
+	}
+	else if(frogx < 2)
+	{
+		frogx = 2;
+	}
+	
 	if(frogDir == 0) //forward
 	{
 		if(frogMove) //jumper
@@ -479,7 +485,16 @@ function drawFrog()
 	}
 	
 }
-
+function newLevel()
+{
+	score = score + 1000;
+	clearInterval(interval);
+	speed = speed-5;
+	interval = setInterval(function(){redraw()},speed);
+	level++;
+	scored0 = false; scored1 = false; scored2 = false; scored3 = false; scored4 = false;
+	
+}
 function clearFrogLog()
 {
 	froglog0 = false;
@@ -600,7 +615,7 @@ function setScore()
 {
 	ctx.font="bold 20px Microgramma";
 	ctx.fillText("Score: " + score,0,560);
-	ctx.fillText("High Score: " + highscore,120,560);
+	ctx.fillText("High Score: " + score,120,560);
 }
 
 function drawLives()
@@ -648,6 +663,7 @@ function redraw()
 }
 
 
+//frog movement methods
 function frogUp()
 {
 	frogDir = 0;
@@ -706,7 +722,6 @@ function moveUp(y)
 		clearInterval(frogInterval);
 		frogMove = false;
 		moving = false;
-		checkScore();
 	}
 	draw();
 }
