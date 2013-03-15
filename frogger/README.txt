@@ -14,7 +14,7 @@ and moves to the next level where all cars and logs move faster.
 -Dead frogger animation
 
 Aspects implemented incorrectly:
--?
+- Really only works to perfection using CHROME, for some reason text gets left out of other browsers. weird
 
 Collaboration:
 Read the piazza boards along with stackoverflow but did not work with anyone else
