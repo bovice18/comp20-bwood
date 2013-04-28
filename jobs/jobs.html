@@ -29,7 +29,15 @@
 	
 	function parse(obj) {
 		element = document.getElementById("list");
-
+		var count = 0;
+		for ( property in obj )          // should return 2
+		{
+			if(obj.hasOwnProperty(property))
+			{
+				count++;
+			}
+		}
+		console.log(count);
 		list1 = document.createElement("ul");	
 		li11 = document.createElement("li");
 		li12 = document.createElement("li");

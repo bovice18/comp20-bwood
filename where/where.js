@@ -521,7 +521,7 @@ function getCandW()
 {
 	var CandWRequest = new XMLHttpRequest();
 
-	CandWRequest.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
+	CandWRequest.open("GET", "http://mbtamap.herokuapp.com/", true);
 
      // Execute the request
     CandWRequest.send(null);
